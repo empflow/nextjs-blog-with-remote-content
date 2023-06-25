@@ -1,11 +1,26 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import getEnvVar from "../../../../util/getEnvVar";
+import { limiter } from "../config/limiter";
 
 const DATA_SOURCE_URL = "https://jsonplaceholder.typicode.com/todos";
 const API_KEY = getEnvVar("API_KEY");
 
-export async function GET() {
+export async function GET(req: Request) {
+  const origin = req.headers.get("origin");
+  const remaniningTokens = await limiter.removeTokens(1);
+  if (remaniningTokens < 0) {
+    return NextResponse.json(
+      { message: "rate limited" },
+      {
+        status: 429,
+        headers: {
+          "Access-Control-Allow-Origin": origin || "*",
+        },
+      }
+    );
+  }
+  console.log(`remanining tokens: ${remaniningTokens}`);
   const res = await axios.get(DATA_SOURCE_URL);
   const todos: Todo[] = res.data;
   return NextResponse.json(todos);
