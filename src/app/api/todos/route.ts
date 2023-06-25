@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: msg }, { status: 400 });
   }
 
-  const payload = { userId, title, completed: false };
+  const payload = { userId, title, done: false };
   const data = (await axios.post(DATA_SOURCE_URL, payload)).data;
   console.log(data);
   return NextResponse.json(data, {});
@@ -35,4 +35,19 @@ export async function DELETE(req: Request) {
   } catch (err) {
     return NextResponse.json({ message: "There has been an error" });
   }
+}
+
+export async function PUT(req: Request) {
+  const body: Todo = await req.json();
+  const { userId, id, title, done } = body;
+
+  if (!userId || !id || !title || typeof done !== "boolean") {
+    const message = "'userId', 'id', 'title', 'done' must all be provided";
+    return NextResponse.json({ message }, { status: 400 });
+  }
+
+  const payload = { userId, title, done };
+  const res = await axios.put(`${DATA_SOURCE_URL}/${id}`, payload);
+  const data = res.data;
+  return NextResponse.json(data, { status: 200 });
 }
