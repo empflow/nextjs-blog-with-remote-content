@@ -1,6 +1,5 @@
-interface Todo {
-  userId: number;
-  id: number;
+type BlogPost = {
+  id: string;
   title: string;
-  done: boolean;
-}
+  date: string;
+};
