@@ -23,7 +23,11 @@ export async function GET(req: Request) {
   console.log(`remanining tokens: ${remaniningTokens}`);
   const res = await axios.get(DATA_SOURCE_URL);
   const todos: Todo[] = res.data;
-  return NextResponse.json(todos);
+  return NextResponse.json(todos, {
+    headers: {
+      "Access-Control-Allow-Origin": origin || "*",
+    },
+  });
 }
 
 export async function POST(req: Request) {
