@@ -11,6 +11,19 @@ export async function GET() {
   return NextResponse.json(todos);
 }
 
+export async function POST(req: Request) {
+  const { userId, title } = await req.json();
+  if (!userId || !title) {
+    const msg = "Both 'userId' and 'title' must be provided";
+    return NextResponse.json({ message: msg }, { status: 400 });
+  }
+
+  const payload = { userId, title, completed: false };
+  const data = (await axios.post(DATA_SOURCE_URL, payload)).data;
+  console.log(data);
+  return NextResponse.json(data, {});
+}
+
 export async function DELETE(req: Request) {
   const { id }: Partial<Todo> = await req.json();
 
