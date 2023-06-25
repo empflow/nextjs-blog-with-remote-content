@@ -1,9 +1,10 @@
 import './globals.css'
-import Navbar from "./components/Navbar"
+import Navbar from './components/Navbar'
+import MyProfilePic from './components/MyProfilePic'
 
 export const metadata = {
-  title: 'Next Todos',
-  description: 'Created for practice',
+  title: "Dave's Blog",
+  description: 'Created by Dave Gray',
 }
 
 export default function RootLayout({
@@ -15,9 +16,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="dark:bg-slate-800">
         <Navbar />
-        <main className="mx-auto max-w-xl p-4 bg-stone-200 min-h-screen">
-          {children}
-        </main>
+        <MyProfilePic />
+        {children}
       </body>
     </html>
   )
