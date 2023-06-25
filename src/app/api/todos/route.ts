@@ -47,7 +47,7 @@ export async function PUT(req: Request) {
   }
 
   const payload = { userId, title, done };
-  const res = await axios.put(`${DATA_SOURCE_URL}/${id}`, payload);
-  const data = res.data;
-  return NextResponse.json(data, { status: 200 });
+  const res = (await axios.put(`${DATA_SOURCE_URL}/${id}`, payload)).data;
+  const updatedTodo = res.data;
+  return NextResponse.json(updatedTodo, { status: 200 });
 }
