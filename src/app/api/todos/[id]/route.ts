@@ -3,11 +3,13 @@ import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = "https://jsonplaceholder.typicode.com/todos";
 
-interface Params {
-  id: string;
+interface Props {
+  params: {
+    id: string;
+  };
 }
 
-export async function GET(req: Request, { params }: { params: Params }) {
+export async function GET(req: Request, { params }: Props) {
   try {
     const res = await axios.get(`${DATA_SOURCE_URL}/${params.id}`);
     const todo = res.data;
