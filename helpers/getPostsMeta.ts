@@ -2,7 +2,9 @@ import getFilePathsFromTreeWithExt from "@/utils/getFilePathsFromTreeWithExt";
 import getPostByFilePath from "./getPostByFilePath";
 
 export default async function getPostsMeta(): Promise<PostMeta[] | null> {
-  const filetree: GithubFiletree = await (await getResFromGithubApi()).json();
+  const res = await getResFromGithubApi();
+  if (!res.ok) return null;
+  const filetree = await res.json();
   const postsFilePaths = getFilePathsFromTreeWithExt(filetree, ".mdx");
 
   const posts: PostMeta[] = [];
