@@ -1,3 +1,4 @@
+import deepCopy from "@/utils/deepCopy";
 import { compileMDX, CompileMDXResult } from "next-mdx-remote/rsc";
 
 export default async function getPostByFilePath(
@@ -9,6 +10,7 @@ export default async function getPostByFilePath(
 
   const compiledMdx = await compileMDX<PostFrontmatter>({
     source: rawMdx,
+    options: { parseFrontmatter: true },
   });
   return constructPostObj(compiledMdx, filePath);
 }
@@ -27,8 +29,9 @@ async function getResFromGithubApi(filePath: string) {
 }
 
 async function isGithubResValid(res: Response) {
-  const data = await res.text();
-  if (!res.ok || data === "404: Not Found") return false;
+  const resCopy = deepCopy(res);
+  const data = await resCopy.text();
+  if (!resCopy.ok || data === "404: Not Found") return false;
   return true;
 }
 
