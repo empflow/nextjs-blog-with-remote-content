@@ -1,5 +1,9 @@
 import deepCopy from "@/utils/deepCopy";
 import { compileMDX, CompileMDXResult } from "next-mdx-remote/rsc";
+import {} from "next-mdx-remote";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
 
 export default async function getPostByFilePath(
   filePath: string
@@ -10,7 +14,16 @@ export default async function getPostByFilePath(
 
   const compiledMdx = await compileMDX<PostFrontmatter>({
     source: rawMdx,
-    options: { parseFrontmatter: true },
+    options: {
+      parseFrontmatter: true,
+      mdxOptions: {
+        rehypePlugins: [
+          rehypeHighlight,
+          rehypeSlug,
+          [rehypeAutolinkHeadings, { behavior: "wrap" }],
+        ],
+      },
+    },
   });
   return constructPostObj(compiledMdx, filePath);
 }
