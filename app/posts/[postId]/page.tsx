@@ -1,57 +1,63 @@
-import getFormattedDate from "@/lib/getFormattedDate"
-import { getSortedPostsData, getPostData } from "@/lib/posts"
-import { notFound } from "next/navigation"
-import Link from "next/link"
+import getFormattedDate from "@/utils/getFormattedDate";
+import getPostsMeta from "@/helpers/getPostsMeta";
+import getPostByFilePath from "@/helpers/getPostByFilePath";
+import { notFound } from "next/navigation";
+import Link from "next/link";
 
-export function generateStaticParams() {
-    const posts = getSortedPostsData()
+export const revalidate = 0;
 
-    return posts.map((post) => ({
-        postId: post.id
-    }))
+interface Context {
+  params: {
+    postId: string;
+  };
 }
+// export async function generateStaticParams() {
+//   const posts = await getPostsMeta();
+//   if (!posts) return [];
+//   return posts.map((post) => ({
+//     postId: post.id,
+//   }));
+// }
 
-export function generateMetadata({ params }: { params: { postId: string } }) {
+export async function generateMetadata({ params: { postId } }: Context) {
+  const post = await getPostByFilePath(`${postId}.mdx`);
 
-    const posts = getSortedPostsData()
-    const { postId } = params
-
-    const post = posts.find(post => post.id === postId)
-
-    if (!post) {
-        return {
-            title: 'Post Not Found'
-        }
-    }
-
+  if (!post) {
     return {
-        title: post.title,
-    }
+      title: "Post Not Found",
+    };
+  }
+
+  return {
+    title: post.meta.title,
+  };
 }
 
-export default async function Post({ params }: { params: { postId: string } }) {
+export default async function Post({ params: { postId } }: Context) {
+  const post = await getPostByFilePath(`${postId}.mdx`);
+  if (!post) notFound();
 
-    const posts = getSortedPostsData()
-    const { postId } = params
+  const { content, meta } = post;
+  const publishDate = getFormattedDate(meta.date);
 
-    if (!posts.find(post => post.id === postId)) notFound()
+  const postTagsElems = meta.tags.map((tag, i) => (
+    <Link key={i} href={`/tags/${tag}`}>
+      {tag}
+    </Link>
+  ));
 
-    const { title, date, contentHtml } = await getPostData(postId)
-
-    const pubDate = getFormattedDate(date)
-
-    return (
-        <main className="px-6 prose prose-xl prose-slate dark:prose-invert mx-auto">
-            <h1 className="text-3xl mt-4 mb-0">{title}</h1>
-            <p className="mt-0">
-                {pubDate}
-            </p>
-            <article>
-                <section dangerouslySetInnerHTML={{ __html: contentHtml }} />
-                <p>
-                    <Link href="/">← Back to home</Link>
-                </p>
-            </article>
-        </main>
-    )
+  return (
+    <>
+      <h2 className="text-3xl mt-4 mb-0">{meta.title}</h2>
+      <p className="mt-0 text-sm">{publishDate}</p>
+      <article>{content}</article>
+      <section>
+        <h3>Related:</h3>
+        <div className="flex flex-grow gap-4">{meta.tags}</div>
+      </section>
+      <p className="mb-10">
+        <Link href="/">← Back to home</Link>
+      </p>
+    </>
+  );
 }

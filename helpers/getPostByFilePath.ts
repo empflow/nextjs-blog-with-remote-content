@@ -28,7 +28,7 @@ async function getResFromGithubApi(filePath: string) {
 
 async function isGithubResValid(res: Response) {
   const data = await res.text();
-  if (!res.ok || data === "404: Not Found") return null;
+  if (!res.ok || data === "404: Not Found") return false;
   return true;
 }
 
