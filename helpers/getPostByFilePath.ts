@@ -1,6 +1,5 @@
 import deepCopy from "@/utils/deepCopy";
 import { compileMDX, CompileMDXResult } from "next-mdx-remote/rsc";
-import {} from "next-mdx-remote";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
@@ -43,8 +42,8 @@ async function getResFromGithubApi(filePath: string) {
 
 async function isGithubResValid(res: Response) {
   const resCopy = deepCopy(res);
-  const data = await resCopy.text();
-  if (!resCopy.ok || data === "404: Not Found") return false;
+  if (!resCopy.ok) return false;
+  if ((await res.text()) === "404: Not Found") return false;
   return true;
 }
 
