@@ -42,7 +42,7 @@ export default async function Post({ params: { postId } }: Context) {
   const publishDate = getFormattedDate(meta.date);
 
   const postTagsElems = meta.tags.map((tag, i) => (
-    <Link key={i} href={`/tags/${tag}`}>
+    <Link key={i} href={`/tags/${tag}`} className="underline">
       {tag}
     </Link>
   ));
@@ -54,11 +54,11 @@ export default async function Post({ params: { postId } }: Context) {
       <article className="prose prose-xl prose-slate dark:prose-invert">
         {content}
       </article>
-      <section>
-        <h3>Related:</h3>
-        <div className="flex flex-grow gap-4">{meta.tags}</div>
+      <section className="mt-10">
+        <h3 className="font-semibold text-xl">Related:</h3>
+        <div className="flex flex-grow gap-4">{postTagsElems}</div>
       </section>
-      <p className="mb-10">
+      <p className="mt-10">
         <Link href="/">← Back to home</Link>
       </p>
     </>
