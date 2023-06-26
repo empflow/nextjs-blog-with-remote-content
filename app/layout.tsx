@@ -15,11 +15,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="dark:bg-slate-800">
-        <main className="m-auto px-4 md:px-6 prose prose-xl prose-slate dark:prose-invert mx-auto">
-          <Navbar />
-
-          {children}
-        </main>
+        <Navbar />
+        <main className="m-auto py-6 px-2">{children}</main>
       </body>
     </html>
   );

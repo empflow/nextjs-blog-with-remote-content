@@ -51,7 +51,9 @@ export default async function Post({ params: { postId } }: Context) {
     <>
       <h2 className="text-3xl mt-4 mb-0">{meta.title}</h2>
       <p className="mt-0 text-sm">{publishDate}</p>
-      <article>{content}</article>
+      <article className="prose prose-xl prose-slate dark:prose-invert">
+        {content}
+      </article>
       <section>
         <h3>Related:</h3>
         <div className="flex flex-grow gap-4">{meta.tags}</div>
