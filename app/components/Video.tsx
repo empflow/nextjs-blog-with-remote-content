@@ -9,6 +9,7 @@ export default function Video({ id }: Props) {
         src={`https://www.youtube-nocookie.com/embed/${id}`}
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        className="rounded-md"
       ></iframe>
     </div>
   );
