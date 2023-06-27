@@ -1,7 +1,9 @@
 import Posts from "./components/Posts";
 import MyProfilePic from "./components/MyProfilePic";
+import isInDevMode from "@/utils/isInDevMode";
+import { TEN_MIN_IN_SEC } from "@/helpers/global";
 
-export const revalidate = 10;
+export const revalidate = isInDevMode() ? 5 : TEN_MIN_IN_SEC;
 
 export default function Home() {
   return (

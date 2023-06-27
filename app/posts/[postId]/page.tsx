@@ -4,21 +4,24 @@ import getPostByFilePath from "@/helpers/getPostByFilePath";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import "highlight.js/styles/github-dark.css";
+import isInDevMode from "@/utils/isInDevMode";
+import { TEN_MIN_IN_SEC } from "@/helpers/global";
 
-export const revalidate = 0;
+export const revalidate = isInDevMode() ? 5 : TEN_MIN_IN_SEC;
 
 interface Context {
   params: {
     postId: string;
   };
 }
-// export async function generateStaticParams() {
-//   const posts = await getPostsMeta();
-//   if (!posts) return [];
-//   return posts.map((post) => ({
-//     postId: post.id,
-//   }));
-// }
+
+export async function generateStaticParams() {
+  const posts = await getPostsMeta();
+  if (!posts) return [];
+  return posts.map((post) => ({
+    postId: post.id,
+  }));
+}
 
 export async function generateMetadata({ params: { postId } }: Context) {
   const post = await getPostByFilePath(`${postId}.mdx`);

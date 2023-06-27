@@ -13,24 +13,29 @@ export default async function getPostByFilePath(
   if (!isGithubResValid(res)) return null;
   const rawMdx = await res.text();
 
-  const compiledMdx = await compileMDX<PostFrontmatter>({
-    source: rawMdx,
-    components: {
-      Video,
-      CustomImage,
-    },
-    options: {
-      parseFrontmatter: true,
-      mdxOptions: {
-        rehypePlugins: [
-          rehypeHighlight,
-          rehypeSlug,
-          [rehypeAutolinkHeadings, { behavior: "wrap" }],
-        ],
+  try {
+    const compiledMdx = await compileMDX<PostFrontmatter>({
+      source: rawMdx,
+      components: {
+        Video,
+        CustomImage,
       },
-    },
-  });
-  return constructPostObj(compiledMdx, filePath);
+      options: {
+        parseFrontmatter: true,
+        mdxOptions: {
+          rehypePlugins: [
+            rehypeHighlight,
+            rehypeSlug,
+            [rehypeAutolinkHeadings, { behavior: "wrap" }],
+          ],
+        },
+      },
+    });
+    return constructPostObj(compiledMdx, filePath);
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
 }
 
 async function getResFromGithubApi(filePath: string) {

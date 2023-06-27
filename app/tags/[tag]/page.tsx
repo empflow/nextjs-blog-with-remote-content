@@ -1,8 +1,9 @@
 import ListItem from "@/app/components/ListItem";
 import getPostsMeta from "@/helpers/getPostsMeta";
+import { TEN_MIN_IN_SEC } from "@/helpers/global";
+import isInDevMode from "@/utils/isInDevMode";
 
-const ONE_DAY_IN_SECS = 0;
-export const revalidate = 0;
+export const revalidate = isInDevMode() ? 5 : TEN_MIN_IN_SEC;
 
 interface Context {
   params: {
@@ -10,12 +11,12 @@ interface Context {
   };
 }
 
-// export async function generateStaticParams() {
-//   const posts = await getPostsMeta();
-//   if (!posts) return [];
-//   const tagsSet = new Set(posts.map((post) => post.tags).flat());
-//   return Array.from(tagsSet).map((tag) => ({ tag }));
-// }
+export async function generateStaticParams() {
+  const posts = await getPostsMeta();
+  if (!posts) return [];
+  const tagsSet = new Set(posts.map((post) => post.tags).flat());
+  return Array.from(tagsSet).map((tag) => ({ tag }));
+}
 
 export function generateMetadata({ params: { tag } }: Context) {
   try {
