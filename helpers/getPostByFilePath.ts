@@ -5,6 +5,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import Video from "@/app/components/Video";
 import CustomImage from "@/app/components/CustomImage";
+import getEnvVar from "@/utils/getEnvVar";
 
 export default async function getPostByFilePath(
   filePath: string
@@ -39,12 +40,13 @@ export default async function getPostByFilePath(
 }
 
 async function getResFromGithubApi(filePath: string) {
+  const githubToken = getEnvVar("GITHUB_TOKEN");
   return fetch(
     `https://raw.githubusercontent.com/empflow/nextjs-blog-content/main/${filePath}`,
     {
       headers: {
         Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        Authorization: `Bearer ${githubToken}`,
         "X-GitHub-Api-Version": "2022-11-28",
       },
     }

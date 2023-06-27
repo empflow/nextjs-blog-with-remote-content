@@ -1,3 +1,6 @@
+import getEnvVar from "./getEnvVar";
+
 export default function isInDevMode() {
-  return process.env.NODE_ENV === "development" ? true : false;
+  const nodeEnv = getEnvVar("NODE_ENV");
+  return nodeEnv === "development" ? true : false;
 }

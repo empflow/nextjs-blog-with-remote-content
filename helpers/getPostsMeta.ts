@@ -1,3 +1,4 @@
+import getEnvVar from "@/utils/getEnvVar";
 import getFilePathsFromTreeWithExt from "@/utils/getFilePathsFromTreeWithExt";
 import getPostByFilePath from "./getPostByFilePath";
 
@@ -17,12 +18,13 @@ export default async function getPostsMeta(): Promise<PostMeta[] | null> {
 }
 
 function getResFromGithubApi() {
+  const githubToken = getEnvVar("GITHUB_TOKEN");
   return fetch(
     `https://api.github.com/repos/empflow/nextjs-blog-content/git/trees/main?recursive=1`,
     {
       headers: {
         Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        Authorization: `Bearer ${githubToken}`,
         "X-GitHub-Api-Version": "2022-11-28",
       },
     }
