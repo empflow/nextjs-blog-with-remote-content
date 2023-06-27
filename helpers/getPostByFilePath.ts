@@ -3,6 +3,8 @@ import { compileMDX, CompileMDXResult } from "next-mdx-remote/rsc";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
+import Video from "@/app/components/Video";
+import CustomImage from "@/app/components/CustomImage";
 
 export default async function getPostByFilePath(
   filePath: string
@@ -13,6 +15,10 @@ export default async function getPostByFilePath(
 
   const compiledMdx = await compileMDX<PostFrontmatter>({
     source: rawMdx,
+    components: {
+      Video,
+      CustomImage,
+    },
     options: {
       parseFrontmatter: true,
       mdxOptions: {
