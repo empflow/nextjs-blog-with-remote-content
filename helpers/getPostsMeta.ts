@@ -13,7 +13,6 @@ export default async function getPostsMeta(): Promise<PostMeta[] | null> {
     if (post) posts.push(post.meta);
   }
 
-  console.log(posts);
   return posts;
 }
 
