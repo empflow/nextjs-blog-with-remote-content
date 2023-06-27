@@ -4,14 +4,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "raw.githubusercontent.com",
-        port: "",
-        pathname: "/empflow/nextjs-blog-content/main/images/**",
-      },
-    ],
+    domains: ["*"],
   },
 };
 
